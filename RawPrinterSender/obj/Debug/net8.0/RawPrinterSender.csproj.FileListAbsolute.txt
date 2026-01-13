@@ -1,0 +1,15 @@
+/Users/Admin/Desktop/printer/RawPrinterSender/bin/Debug/net8.0/RawPrinterSender
+/Users/Admin/Desktop/printer/RawPrinterSender/bin/Debug/net8.0/RawPrinterSender.deps.json
+/Users/Admin/Desktop/printer/RawPrinterSender/bin/Debug/net8.0/RawPrinterSender.runtimeconfig.json
+/Users/Admin/Desktop/printer/RawPrinterSender/bin/Debug/net8.0/RawPrinterSender.dll
+/Users/Admin/Desktop/printer/RawPrinterSender/bin/Debug/net8.0/RawPrinterSender.pdb
+/Users/Admin/Desktop/printer/RawPrinterSender/obj/Debug/net8.0/RawPrinterSender.GeneratedMSBuildEditorConfig.editorconfig
+/Users/Admin/Desktop/printer/RawPrinterSender/obj/Debug/net8.0/RawPrinterSender.AssemblyInfoInputs.cache
+/Users/Admin/Desktop/printer/RawPrinterSender/obj/Debug/net8.0/RawPrinterSender.AssemblyInfo.cs
+/Users/Admin/Desktop/printer/RawPrinterSender/obj/Debug/net8.0/RawPrinterSender.csproj.CoreCompileInputs.cache
+/Users/Admin/Desktop/printer/RawPrinterSender/obj/Debug/net8.0/RawPrinterSender.sourcelink.json
+/Users/Admin/Desktop/printer/RawPrinterSender/obj/Debug/net8.0/RawPrinterSender.dll
+/Users/Admin/Desktop/printer/RawPrinterSender/obj/Debug/net8.0/refint/RawPrinterSender.dll
+/Users/Admin/Desktop/printer/RawPrinterSender/obj/Debug/net8.0/RawPrinterSender.pdb
+/Users/Admin/Desktop/printer/RawPrinterSender/obj/Debug/net8.0/RawPrinterSender.genruntimeconfig.cache
+/Users/Admin/Desktop/printer/RawPrinterSender/obj/Debug/net8.0/ref/RawPrinterSender.dll

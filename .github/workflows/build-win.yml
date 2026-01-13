@@ -1,0 +1,50 @@
+name: Build Windows Artifacts
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build-win:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # --- Build RawPrinterSender (.NET) ---
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Build RawPrinterSender
+        run: |
+          cd RawPrinterSender
+          dotnet restore
+          dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o ..\dist\RawPrinterSender
+
+      # --- Build w80-print-service.exe (Node -> pkg) ---
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install deps (w80-print-service)
+        run: |
+          cd w80-print-service
+          npm ci
+
+      - name: Build service exe with pkg
+        run: |
+          npm i -g pkg
+          cd w80-print-service
+          pkg server.js --targets node18-win-x64 --output ..\dist\w80-print-service\w80-print-service.exe
+
+      # --- Upload artifacts ---
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: w80-windows-build
+          path: dist
