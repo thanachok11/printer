@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RawPrinterSender")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82c58fc7173e5fff2af55defab93f63db72dbc7b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ba1a8c3994574ee40d3c278c17f1563957f5f3d4")]
 [assembly: System.Reflection.AssemblyProductAttribute("RawPrinterSender")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RawPrinterSender")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
