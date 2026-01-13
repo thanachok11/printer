@@ -24,18 +24,7 @@ jobs:
           dotnet-version: "8.0.x"
           cache: true
           cache-dependency-path: |
-            RawPrinterSender/packages.lock.json
             W80PrintService/packages.lock.json
-
-      - name: Restore RawPrinterSender
-        run: dotnet restore RawPrinterSender/RawPrinterSender.csproj
-
-      - name: Publish RawPrinterSender (win-x64 single file)
-        run: >
-          dotnet publish RawPrinterSender/RawPrinterSender.csproj
-          -c Release -r win-x64 --self-contained true
-          /p:PublishSingleFile=true
-          -o dist/RawPrinterSender
 
       - name: Restore W80PrintService
         run: dotnet restore W80PrintService/W80PrintService.csproj

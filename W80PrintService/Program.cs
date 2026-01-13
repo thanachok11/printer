@@ -1,48 +1,60 @@
 using System.Text.Json;
+using Microsoft.Extensions.Hosting.WindowsServices;
 using W80PrintService.Models;
 using W80PrintService.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+var options = new WebApplicationOptions
+{
+    Args = args,
+    ContentRootPath = AppContext.BaseDirectory,
+};
 
-// JSON body size limit ~20MB
+var builder = WebApplication.CreateBuilder(options);
+
+builder.Host.UseWindowsService(o => o.ServiceName = "W80PrintService");
+
+
 builder.Services.ConfigureHttpJsonOptions(o =>
 {
     o.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
 
-
 var app = builder.Build();
+
+var printLock = new SemaphoreSlim(1, 1);
 
 app.MapGet("/health", () => Results.Text("ok"));
 
-app.MapPost("/print/image", async (PrintImageRequest req) =>
+app.MapPost("/print/image", async (PrintImageRequest req, IConfiguration cfg) =>
 {
     if (string.IsNullOrWhiteSpace(req.ImageBase64))
         return Results.BadRequest(new { ok = false, error = "imageBase64 is required" });
 
+    // เลือก printer
+    var defaultPrinter = cfg["Printer:DefaultName"];
+    var printerName = string.IsNullOrWhiteSpace(req.PrinterName) ? defaultPrinter : req.PrinterName;
+
+    if (string.IsNullOrWhiteSpace(printerName))
+        return Results.BadRequest(new { ok = false, error = "printerName is required (or set Printer:DefaultName in appsettings)" });
+
+    var docName = string.IsNullOrWhiteSpace(req.DocName) ? (cfg["Printer:DefaultDocName"] ?? "W80-RAW") : req.DocName;
+
     try
     {
-        // รองรับ data url
+        // decode base64 (รองรับ data url)
         var raw = req.ImageBase64!;
         var cleaned = raw.Contains("base64,", StringComparison.OrdinalIgnoreCase)
             ? raw.Split("base64,", 2, StringSplitOptions.None)[1]
             : raw;
 
-        var trimmed = cleaned.Trim();
-
         byte[] imgBuf;
-        try
-        {
-            imgBuf = Convert.FromBase64String(trimmed);
-        }
-        catch
-        {
-            return Results.BadRequest(new { ok = false, error = "invalid base64" });
-        }
+        try { imgBuf = Convert.FromBase64String(cleaned.Trim()); }
+        catch { return Results.BadRequest(new { ok = false, error = "invalid base64" }); }
 
         if (imgBuf.Length == 0)
-            return Results.BadRequest(new { ok = false, error = "imageBase64 decoded to empty buffer (check base64 content)" });
+            return Results.BadRequest(new { ok = false, error = "imageBase64 decoded to empty buffer" });
 
+        // แปลงเป็น ESC/POS raster
         var raster = await EscPos.ImageToRasterGsV0(imgBuf, req.PaperWidth, req.Threshold);
 
         var payload = EscPos.Concat(
@@ -54,20 +66,27 @@ app.MapPost("/print/image", async (PrintImageRequest req) =>
             EscPos.EscAlign(0)
         );
 
+        // (optional) debug dump
         if (req.SaveDebug)
         {
-            var outDir = Path.Combine(Directory.GetCurrentDirectory(), "out");
+            var outDir = Path.Combine(AppContext.BaseDirectory, "out");
             Directory.CreateDirectory(outDir);
             var outFile = Path.Combine(outDir, $"job_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}.bin");
             await File.WriteAllBytesAsync(outFile, payload);
         }
 
-        return Results.Ok(new
+        await printLock.WaitAsync();
+        try
         {
-            ok = true,
-            bytesLength = payload.Length,
-            escposBase64 = Convert.ToBase64String(payload)
-        });
+            var ok = RawPrinterHelper.SendBytesToPrinter(printerName!, payload, docName!, out var err);
+            if (!ok) return Results.StatusCode(500, new { ok = false, error = err });
+        }
+        finally
+        {
+            printLock.Release();
+        }
+
+        return Results.Ok(new { ok = true, printerName, bytesLength = payload.Length });
     }
     catch (Exception e)
     {

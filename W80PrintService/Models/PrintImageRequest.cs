@@ -7,4 +7,7 @@ public sealed class PrintImageRequest
     public int Threshold { get; set; } = 180;
     public bool Cut { get; set; } = true;
     public bool SaveDebug { get; set; } = false;
+
+    public string? PrinterName { get; set; }   
+    public string? DocName { get; set; } 
 }
