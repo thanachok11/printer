@@ -23,8 +23,10 @@ jobs:
         with:
           dotnet-version: "8.0.x"
           cache: true
+          cache-dependency-path: |
+            RawPrinterSender/packages.lock.json
+            W80PrintService/packages.lock.json
 
-      # --- Build RawPrinterSender (.NET) ---
       - name: Restore RawPrinterSender
         run: dotnet restore RawPrinterSender/RawPrinterSender.csproj
 
@@ -35,7 +37,6 @@ jobs:
           /p:PublishSingleFile=true
           -o dist/RawPrinterSender
 
-      # --- Build W80PrintService (.NET) ---
       - name: Restore W80PrintService
         run: dotnet restore W80PrintService/W80PrintService.csproj
 
@@ -46,7 +47,6 @@ jobs:
           /p:PublishSingleFile=true
           -o dist/W80PrintService
 
-      # --- Upload artifacts ---
       - name: Upload dist
         uses: actions/upload-artifact@v4
         with:
