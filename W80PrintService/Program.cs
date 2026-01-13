@@ -79,7 +79,7 @@ app.MapPost("/print/image", async (PrintImageRequest req, IConfiguration cfg) =>
         try
         {
             var ok = RawPrinterHelper.SendBytesToPrinter(printerName!, payload, docName!, out var err);
-            if (!ok) return Results.StatusCode(500, new { ok = false, error = err });
+            if (!ok) return Results.Problem(detail: err, statusCode: 500, title: "print failed");
         }
         finally
         {
