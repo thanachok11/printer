@@ -13,34 +13,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # --- Build RawPrinterSender (.NET) ---
+      - name: Prepare dist folder
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
+          cache: true
 
-      - name: Build RawPrinterSender
-        run: |
-          cd RawPrinterSender
-          dotnet restore
-          dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o ..\dist\RawPrinterSender
+      # --- Build RawPrinterSender (.NET) ---
+      - name: Restore RawPrinterSender
+        run: dotnet restore RawPrinterSender/RawPrinterSender.csproj
 
-      # --- Build w80-print-service.exe (Node -> pkg) ---
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
+      - name: Publish RawPrinterSender (win-x64 single file)
+        run: >
+          dotnet publish RawPrinterSender/RawPrinterSender.csproj
+          -c Release -r win-x64 --self-contained true
+          /p:PublishSingleFile=true
+          -o dist/RawPrinterSender
 
-      - name: Install deps (w80-print-service)
-        run: |
-          cd w80-print-service
-          npm ci
+      # --- Build W80PrintService (.NET) ---
+      - name: Restore W80PrintService
+        run: dotnet restore W80PrintService/W80PrintService.csproj
 
-      - name: Build service exe with pkg
-        run: |
-          npm i -g pkg
-          cd w80-print-service
-          pkg server.js --targets node18-win-x64 --output ..\dist\w80-print-service\w80-print-service.exe
+      - name: Publish W80PrintService (win-x64 single file)
+        run: >
+          dotnet publish W80PrintService/W80PrintService.csproj
+          -c Release -r win-x64 --self-contained true
+          /p:PublishSingleFile=true
+          -o dist/W80PrintService
 
       # --- Upload artifacts ---
       - name: Upload dist
