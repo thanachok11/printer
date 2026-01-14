@@ -31,9 +31,8 @@ public static class EscPos
 
         img.Mutate(x =>
         {
-            x.Contrast(1.20f);   // ลอง 1.10 - 1.35
-            x.Gamma(0.95f);      // ลอง 0.90 - 1.00 (ยิ่งต่ำยิ่งเข้ม)
-            x.Brightness(1.00f); // ปกติไว้ก่อน (ถ้าจางลอง 1.03)
+            x.Contrast(1.20f);     // 1.10 - 1.35
+            x.Brightness(1.03f);   // 1.00 - 1.08 (ช่วยให้เข้มขึ้นเวลา threshold)
         });
 
         int width = img.Width;
