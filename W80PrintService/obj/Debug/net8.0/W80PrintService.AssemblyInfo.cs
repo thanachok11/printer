@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("W80PrintService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82c58fc7173e5fff2af55defab93f63db72dbc7b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+282d8b309c3f4399fe3d78dec1da6f87abd6ff7c")]
 [assembly: System.Reflection.AssemblyProductAttribute("W80PrintService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("W80PrintService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

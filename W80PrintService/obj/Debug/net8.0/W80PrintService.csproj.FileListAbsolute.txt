@@ -27,3 +27,7 @@
 /Users/Admin/Desktop/printer/W80PrintService/obj/Debug/net8.0/W80PrintService.pdb
 /Users/Admin/Desktop/printer/W80PrintService/obj/Debug/net8.0/W80PrintService.genruntimeconfig.cache
 /Users/Admin/Desktop/printer/W80PrintService/obj/Debug/net8.0/ref/W80PrintService.dll
+/Users/Admin/Desktop/printer/W80PrintService/bin/Debug/net8.0/packages.lock.json
+/Users/Admin/Desktop/printer/W80PrintService/bin/Debug/net8.0/Microsoft.Extensions.Hosting.WindowsServices.dll
+/Users/Admin/Desktop/printer/W80PrintService/bin/Debug/net8.0/System.ServiceProcess.ServiceController.dll
+/Users/Admin/Desktop/printer/W80PrintService/bin/Debug/net8.0/runtimes/win/lib/net8.0/System.ServiceProcess.ServiceController.dll
